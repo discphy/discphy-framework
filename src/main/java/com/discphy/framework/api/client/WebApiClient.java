@@ -12,22 +12,20 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
-import static java.util.Objects.nonNull;
-
 @Slf4j
 @Component
 public class WebApiClient {
 
     private final WebClient webClient;
 
-    private final int MAX_MEMORY = 5 * 1024 * 1024;
+    private static final int MAX_MEMORY = 5 * 1024 * 1024;
 
     public WebApiClient(WebClient.Builder builder) {
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
         this.webClient = builder
-                .clientConnector(new ReactorClientHttpConnector(HttpClient.newConnection().compress(true)))
+                .clientConnector(new ReactorClientHttpConnector(HttpClient.create().compress(true)))
                 .uriBuilderFactory(factory)
                 .exchangeStrategies(ExchangeStrategies.builder()
                         .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(MAX_MEMORY))
@@ -52,6 +50,6 @@ public class WebApiClient {
                 .uri(request.getUrl())
                 .headers(h -> h.addAll(request.getHeaders()));
 
-        return nonNull(request.getBody()) ? spec.bodyValue(request.getBody()) : spec;
+        return request.getBody() != null ? spec.bodyValue(request.getBody()) : spec;
     }
 }

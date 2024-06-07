@@ -15,18 +15,20 @@ public interface ApiRequest<T> {
 
     String getUrl();
 
-    HttpHeaders getHeaders();
-
     Object getBody();
 
     Class<T> getResponseType();
 
+    default HttpHeaders getHeaders() {
+        return new HttpHeaders();
+    }
+
     default Consumer<T> getSubscribe() {
-        return (t) -> getLogger().info("Api request subscribe : {}", t);
+        return (response) -> getLogger().info("Api request subscribe: {}", response);
     }
 
     default Consumer<Throwable> getError() {
-        return (t) -> getLogger().error("Api request error", t);
+        return (error) -> getLogger().error("Api request error", error);
     }
 
     default Logger getLogger() {
