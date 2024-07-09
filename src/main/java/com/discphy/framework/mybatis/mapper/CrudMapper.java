@@ -17,11 +17,11 @@ import java.util.Optional;
 public interface CrudMapper<T, ID extends Serializable> {
 
     /**
-     * @param entity Table Entity {@link T}
-     * @return save Count {@link Integer}
+     * @param entity Table entity {@link T}
+     * @return create count {@link Integer}
      */
     @InsertProvider(type = CrudSqlProvider.class)
-    int save(T entity);
+    int create(T entity);
 
     /**
      * @param id Table PK {@link ID}
@@ -44,32 +44,11 @@ public interface CrudMapper<T, ID extends Serializable> {
     long count();
 
     /**
-     * @param id Table PK {@link ID}
-     * @return delete count {@link Integer}
-     */
-    @DeleteProvider(type = CrudSqlProvider.class)
-    int deleteById(ID id);
-
-    /**
      * @param entity Table entity {@link T}
      * @return delete count {@link Integer}
      */
     @DeleteProvider(type = CrudSqlProvider.class)
     int delete(T entity);
-
-    /**
-     * @param ids Table PKs {@link List}&lt;{@link ID}&gt;
-     * @return delete count {@link Integer}
-     */
-    @DeleteProvider(type = CrudSqlProvider.class)
-    int deleteAllById(@Param("ids") Iterable<ID> ids);
-
-    /**
-     * @param entity Table entity {@link T}
-     * @return create count {@link Integer}
-     */
-    @InsertProvider(type = CrudSqlProvider.class)
-    int create(T entity);
 
     /**
      * update all column
@@ -78,21 +57,5 @@ public interface CrudMapper<T, ID extends Serializable> {
      */
     @UpdateProvider(type = CrudSqlProvider.class)
     int update(T entity);
-
-    /**
-     * update nonnull column
-     * @param entity Table entity {@link T}
-     * @return update count {@link Integer}
-     */
-    @UpdateProvider(type = CrudSqlProvider.class)
-    int dynamicUpdate(T entity);
-
-    /**
-     * bulk insert
-     * @param entities Table entities {@link List}&lt;{@link T}&gt;
-     * @return create count {@link Integer}
-     */
-    @InsertProvider(type = CrudSqlProvider.class)
-    int createAll(@Param("entities") Iterable<T> entities);
 
 }
